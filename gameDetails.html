@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Detail</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 style="text-align: center">GAME INFO DETAILS</h1>
+      <div class="row">
+        <div class="col-12">
+          <h4 id="game-name"></h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <h6 id="game-company"></h6>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">
+          <img
+            id="game-logo"
+            alt=""
+            style="max-height: 200px"
+            src=""
+            class="img-thumbnail"
+          />
+        </div>
+        <div class="col-4">
+          <h6 id="game-platforms"></h6>
+        </div>
+        <div class="col-4">Where to buy: </div>
+      </div>
+      <div class="row">
+        <div class="col-3" id="game-metacritic-score"></div>
+        <div class="col-7" id="game-description"></div>
+      </div>
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+  $(document).ready(function () {
+    let getDetail = () => {
+      let urlParams = window.location.toString().split("?")[1];
+
+      let id = urlParams.split("=")[1];
+
+      const url = `https://api.rawg.io/api/games/${id}?key=43d750c7481748f99dabb07d5e8aa4eb`;
+
+      const data = {};
+
+      fetch(url, {
+        method: "GET", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          let year = data.released.split("-")[0];
+          // Obtener la lista de plataformas del objeto de respuesta de la API
+          const platforms = data.platforms;
+          // Construir una lista HTML de las plataformas
+          const platformListItems = platforms.map(
+            (platform) =>
+              `<li class='list-group list-group-flush'>${platform.platform.name}</li>`
+          );
+          const platformListHtml = `<ul class="list-group-item" style="background:black; color:white;">${platformListItems.join(
+            ""
+          )}</ul>`;
+          //Guardando el valor del score en metacritic
+          let scoreMeta = data.metacritic;
+          //Mostrando en la etiqueta obtenida por el id
+          $("#game-name").html(`${data.name} (${year})`);
+          $("#game-company").html(`${data.publishers[0].name}`);
+          $("#game-logo").prop("src", data.background_image);
+          $("#game-platforms").html(`Platforms: ${platformListHtml}`);
+          if (scoreMeta >= 75) {
+            $("#game-metacritic-score").html(
+              `<div class="box green">${scoreMeta}/100 <br/> <p style='font-size:30px'>Metacritic</p></div>`
+            );
+          } else if (scoreMeta >= 50) {
+            $("#game-metacritic-score").html(
+              `<div class="box yellow">${scoreMeta}</div>`
+            );
+          } else {
+            $("#game-metacritic-score").html(
+              `<div class="box red">${scoreMeta}</div>`
+            );
+          }
+          $("#game-description").html(`Description: </br> ${data.description}`);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+
+    getDetail();
+  });
+</script>

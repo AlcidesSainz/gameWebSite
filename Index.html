@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Site</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <br />
+      <h1>GAMES INFO SITE</h1>
+      <br />
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              id="searchInput"
+              aria-describedby=""
+              placeholder="search"
+            />
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <button id="getGames" class="btn btn-primary">Obtener</button>
+        </div>
+      </div>
+      <div
+        class="btn-toolbar"
+        role="toolbar"
+        aria-label="Toolbar with button groups"
+      ></div>
+      <div>
+        <small id="countResult"></small>
+      </div>
+
+      <br />
+      <div id="gameRow" class="row"></div>
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(document).on("click", "#getGames", function () {
+      // let cantvalue = $("#cantInput").val();
+
+      let searchvalue = $("#searchInput").val();
+
+      let url = `https://api.rawg.io/api/games?key=43d750c7481748f99dabb07d5e8aa4eb&search=${searchvalue}`;
+
+      getresult(url);
+    });
+
+    let getresult = (url) => {
+      const data = {};
+
+      fetch(url, {
+        method: "GET", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          $("#gameRow").empty();
+
+          let { results } = data; //desestructuracion de objeto
+          // console.log("Success:", data);
+          //   console.log("Success:", results);
+          //   console.log();
+
+          $("#countResult").html(`${results.length} resultados de`);
+          $.each(results, function (indexInArray, valueOfElement) {
+            let { id, name, background_image, genres } = valueOfElement;
+
+            let genresDescription = "";
+
+            $.each(genres, function (index, gender) {
+              let { name } = gender;
+              genresDescription += `${name} `;
+            });
+
+            let cardGame = `<div class="col-md-3">
+                                            <div class="card animate-animated animate__bounceIn" style="width: 18rem;">
+                                                <img class="card-img-top" src="${background_image}" alt="">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${name}</h5>
+                                                    <p class="card-text">${genresDescription}</p>
+                                                    <a href="gameDetails.html?id=${id}" target='_blank' class="btn btn-primary">Detalle</a>
+                                                </div>
+                                            </div>
+                                        </div>`;
+
+            $("#gameRow").append(cardGame);
+          });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+  });
+</script>
