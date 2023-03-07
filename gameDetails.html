@@ -44,11 +44,54 @@
         <div class="col-4">
           <h6 id="game-platforms"></h6>
         </div>
-        <div class="col-4">Where to buy: </div>
+        <div class="col-4">Where to buy:</div>
       </div>
       <div class="row">
         <div class="col-3" id="game-metacritic-score"></div>
-        <div class="col-7" id="game-description"></div>
+        <div
+          class="col-7"
+          id="game-description"
+          style="max-height: 190px; overflow: hidden"
+        ></div>
+        <button
+          id="show-more"
+          style="
+            border: none;
+            background-color: transparent;
+            text-decoration: underline;
+            margin: 10px;
+          "
+        >
+          Mostrar más
+        </button>
+      </div>
+      <!--Carrusel-->
+      <div
+        id="carouselExampleAutoplaying"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner">
+          <!-- Las imágenes de la API se insertarán aquí -->
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleAutoplaying"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleAutoplaying"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
       </div>
     </div>
   </body>
@@ -109,6 +152,34 @@
         .catch((error) => {
           console.error("Error:", error);
         });
+      if (
+        $("#game-description")[0].scrollHeight >
+        $("#game-description").outerHeight()
+      ) {
+        $("show-more").show();
+      }
+      $("#show-more").click(function () {
+        $("#game-description").css("max-height", "none");
+        $(this).hide();
+      });
+      //Carrusel
+      var apiEndpoint = `https://api.rawg.io/api/games/${id}/screenshots?key=43d750c7481748f99dabb07d5e8aa4eb`;
+      $.get(apiEndpoint, function (data) {
+        let images = data.results.map(function (result) {
+          return result.image;
+        });
+        //Agregar cada imagen al carrusel
+        images.forEach(function (image, index) {
+          let item = $("<div>").addClass("carousel-item");
+          let img = $("<img>").attr("src", image).addClass("d-block w-100");
+          item.append(img);
+
+          if (index == 0) {
+            item.addClass("active");
+          }
+          $(".carousel-inner").append(item);
+        });
+      });
     };
 
     getDetail();
