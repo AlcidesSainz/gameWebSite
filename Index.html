@@ -17,12 +17,43 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
   </head>
 
-  <body>
+  <body
+    style="
+      background: rgb(25, 25, 24);
+      background: linear-gradient(
+        90deg,
+        rgba(25, 25, 24, 1) 15%,
+        rgba(81, 87, 84, 1) 50%,
+        rgba(25, 25, 24, 1) 85%
+      );
+      color: aliceblue;
+    "
+  >
     <div class="container">
       <br />
-      <h1>GAMES INFO SITE</h1>
+      <h1
+        style="
+          text-align: left;
+          font-size: 50px;
+          color: white;
+          text-shadow: 2px 2px #515754;
+        "
+      >
+        THE GAMING LIBRARY
+      </h1>
+      <br />
+      <nav>
+        <ul>
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#">Categorias</a></li>
+          <li><a href="#">Ultimos Lanzamientos</a></li>
+          <li><a href="#">Minijuegos</a></li>
+          <li><a href="#">Sobre mi</a></li>
+        </ul>
+      </nav>
       <br />
       <div class="row">
         <div class="col-md-4">
@@ -32,23 +63,23 @@
               class="form-control"
               id="searchInput"
               aria-describedby=""
-              placeholder="search"
+              placeholder="Buscar..."
             />
           </div>
         </div>
-
         <div class="col-md-2">
           <button id="getGames" class="btn btn-primary">Obtener</button>
         </div>
+        <div>
+          <small id="countResult"></small>
+        </div>
       </div>
+      <br />
       <div
         class="btn-toolbar"
         role="toolbar"
         aria-label="Toolbar with button groups"
       ></div>
-      <div>
-        <small id="countResult"></small>
-      </div>
 
       <br />
       <div id="gameRow" class="row"></div>
@@ -85,7 +116,7 @@
           //   console.log("Success:", results);
           //   console.log();
 
-          $("#countResult").html(`${results.length} resultados de`);
+          $("#countResult").html(`${results.length} resultados de busqueda`);
           $.each(results, function (indexInArray, valueOfElement) {
             let { id, name, background_image, genres } = valueOfElement;
 
@@ -93,14 +124,14 @@
 
             $.each(genres, function (index, gender) {
               let { name } = gender;
-              genresDescription += `${name} `;
+              genresDescription += `-${name} `;
             });
 
             let cardGame = `<div class="col-md-3">
-                                            <div class="card animate-animated animate__bounceIn" style="width: 18rem;">
+                                            <div class="card animate-animated animate__bounceIn" style="width: 18rem; background-color:black">
                                                 <img class="card-img-top" src="${background_image}" alt="">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">${name}</h5>
+                                                    <h5 class="card-title" style="text-decoration: underline";>${name}</h5>
                                                     <p class="card-text">${genresDescription}</p>
                                                     <a href="gameDetails.html?id=${id}" target='_blank' class="btn btn-primary">Detalle</a>
                                                 </div>

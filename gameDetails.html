@@ -21,9 +21,40 @@
 
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body>
+  <body
+    style="
+      background: rgb(25, 25, 24);
+      background: linear-gradient(
+        90deg,
+        rgba(25, 25, 24, 1) 15%,
+        rgba(81, 87, 84, 1) 50%,
+        rgba(25, 25, 24, 1) 85%
+      );
+      color: aliceblue;
+    "
+  >
     <div class="container">
-      <h1 style="text-align: center">GAME INFO DETAILS</h1>
+      <h1
+        style="
+          text-align: left;
+          font-size: 50px;
+          color: white;
+          text-shadow: 2px 2px #515754;
+        "
+      >
+        THE GAMING LIBRARY
+      </h1>
+      <br />
+      <nav>
+        <ul>
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#">Categorias</a></li>
+          <li><a href="#">Ultimos Lanzamientos</a></li>
+          <li><a href="#">Minijuegos</a></li>
+          <li><a href="#">Sobre mi</a></li>
+        </ul>
+      </nav>
+      <br />
       <div class="row">
         <div class="col-12">
           <h4 id="game-name"></h4>
@@ -45,7 +76,7 @@
           />
         </div>
 
-        <div class="col-4">Where to buy:</div>
+        <div class="col-4" id="platform-buttons">Where to buy:</div>
 
         <div class="col-4">
           <h6 id="game-platforms"></h6>
@@ -53,11 +84,16 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-3" id="game-metacritic-score"></div>
+        <div><br /><br /></div>
+        <div
+          class="col-3"
+          id="game-metacritic-score"
+          style="padding-left: 80px"
+        ></div>
         <div
           class="col-7"
           id="game-description"
-          style="max-height: 190px; overflow: hidden"
+          style="max-height: 190px; overflow: hidden; padding-left: 60px"
         ></div>
         <button
           id="show-more"
@@ -66,6 +102,7 @@
             background-color: transparent;
             text-decoration: underline;
             margin: 10px;
+            color: greenyellow;
           "
         >
           Mostrar más
@@ -141,6 +178,7 @@
           $("#game-company").html(`${data.publishers[0].name}`);
           $("#game-logo").prop("src", data.background_image);
           $("#game-platforms").html(`Platforms: ${platformListHtml}`);
+
           if (scoreMeta >= 75) {
             $("#game-metacritic-score").html(
               `<div class="box green">${scoreMeta}/100 <br/> <p style='font-size:30px'>Metacritic</p></div>`
@@ -179,13 +217,17 @@
 
             $("<div>")
               .addClass("carousel-item " + activeClass)
-              .append($("<img>").addClass("d-block w-100").attr("src", imgSrc))
+              .append(
+                $("<img>")
+                  .addClass("d-block w-100 img-thumbnail")
+                  .attr("src", imgSrc)
+              )
               .appendTo("#carouselExample .carousel-inner");
           }
         }
       );
-      //Mostrar generos
-      const genres = data.platforms;
+      //Mostrar plataformas
+
       //Agregar los generos al html
     };
 
